@@ -1,0 +1,66 @@
+#cr {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f9f3e3;
+}
+
+.create__recipe {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+#form__title {
+  font-size: 3rem;
+}
+
+.form {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section__one,
+.section__two {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+select {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  background-color: #cfc8b5;
+  border: none;
+}
+
+.create__recipe__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.create__recipe__form input,
+.create__recipe__form textarea,
+.create__recipe__form button {
+  width: 100%;
+}
+
+.create__recipe__form textarea {
+  resize: none;
+}
+
+input[type="file"] {
+  padding: 0.7rem;
+}
+
+.create__recipe__form sup {
+  color: red;
+}

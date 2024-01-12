@@ -1,0 +1,23 @@
+.edit__recipe {
+  width: 55%;
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.edit__recipe__modal {
+  background-color: #f9f3e3;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.modal__form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#error__message {
+  text-align: center;
+  margin-top: 1rem;
+}
