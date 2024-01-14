@@ -225,42 +225,50 @@ function Recipe() {
             </p>
           </section>
           <hr />
-          {localStorage.getItem("userInfo") !== null && (
-            <section className="bottom__section">
-              {recipe.userDetails?.email !==
-              JSON.parse(localStorage.getItem("userInfo")).email ? (
-                <div className="input__section">
-                  <input
-                    type="text"
-                    placeholder="Write a comment"
-                    value={comment}
-                    required
-                    onChange={(e) => setComment(e.target.value)}
-                    id="comment__input"
-                  />
-                  <button onClick={() => addComment(recipe._id)}>
-                    <i className="fa-solid fa-paper-plane fa-beat-fade"></i>
-                  </button>
-                </div>
-              ) : (
-                ""
-              )}
 
-              <section ref={targetEl} className="comments">
-                {recipe.comments.length !== 0 &&
-                  recipe.comments.map((comment, index) => (
-                    <div id="comment" key={index}>
-                      <div id="comment__details">
-                        <img id="comment__avatar" src={comment.avatar} alt="" />{" "}
-                        <div id="comment__info">
-                          <label>
-                            {comment.name}.{" "}
-                            <span>{comment.updatedAt.substring(0, 10)}</span>
-                          </label>{" "}
-                          <p>{comment.comment}</p>
-                        </div>
+          <section className="bottom__section">
+            <h1 id="comments__label">
+              Comments <i className="fa-solid fa-comments"></i>
+            </h1>
+            {localStorage.getItem("userInfo") !== null && (
+              <section>
+                {recipe.userDetails?.email !==
+                JSON.parse(localStorage.getItem("userInfo")).email ? (
+                  <div className="input__section">
+                    <input
+                      type="text"
+                      placeholder="Liked/disliked the recipe? Write a comment"
+                      value={comment}
+                      required
+                      onChange={(e) => setComment(e.target.value)}
+                      id="comment__input"
+                    />
+                    <button onClick={() => addComment(recipe._id)}>
+                      <i className="fa-solid fa-paper-plane fa-beat-fade"></i>
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </section>
+            )}
+
+            <section ref={targetEl} className="comments">
+              {recipe.comments.length !== 0 &&
+                recipe.comments.map((comment, index) => (
+                  <div id="comment" key={index}>
+                    <div id="comment__details">
+                      <img id="comment__avatar" src={comment.avatar} alt="" />{" "}
+                      <div id="comment__info">
+                        <label>
+                          {comment.name}.{" "}
+                          <span>{comment.updatedAt.substring(0, 10)}</span>
+                        </label>{" "}
+                        <p>{comment.comment}</p>
                       </div>
-                      {comment.email ===
+                    </div>
+                    {localStorage.getItem("userInfo") !== null &&
+                      comment.email ===
                         JSON.parse(localStorage.getItem("userInfo")).email && (
                         <button
                           id="delete__comment"
@@ -269,11 +277,10 @@ function Recipe() {
                           <i className="fa-solid fa-xmark"></i>
                         </button>
                       )}
-                    </div>
-                  ))}
-              </section>
+                  </div>
+                ))}
             </section>
-          )}
+          </section>
 
           {localStorage.getItem("userInfo") !== null && (
             <div>
