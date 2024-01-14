@@ -95,7 +95,9 @@ function Login() {
               </Link>
             </p>
           </form>
-          <h1>{isLoading ? "loading..." : message}</h1>
+          <p id="authentication__error__message">
+            {isLoading ? "loading..." : message}
+          </p>
         </div>
         <img className="signUp__image" src={loginImage} alt="" />
       </div>

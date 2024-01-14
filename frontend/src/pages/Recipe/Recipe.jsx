@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./recipe.css";
@@ -9,6 +9,8 @@ import Navbar from "../Navbar/Navbar";
 
 function Recipe() {
   const { recipeId } = useParams();
+
+  const targetEl = useRef(null);
 
   const [recipe, setRecipe] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,16 +27,16 @@ function Recipe() {
 
   const getRecipe = async () => {
     try {
-      const accessToken = JSON.parse(
-        localStorage.getItem("userInfo")
-      ).accessToken;
+      // const accessToken = JSON.parse(
+      //   localStorage.getItem("userInfo")
+      // ).accessToken;
       const response = await axios.get(
-        `http://localhost:3000/recipe/getSelectedRecipe/${recipeId}`,
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
+        `http://localhost:3000/recipe/getSelectedRecipe/${recipeId}`
+        // {
+        //   headers: {
+        //     authorization: `Bearer ${accessToken}`,
+        //   },
+        // }
       );
       const details = await fetchUserDetails(response.data.message.createdBy);
       setRecipe({ ...response.data.message, userDetails: details });
@@ -51,16 +53,16 @@ function Recipe() {
 
   const fetchUserDetails = async (userId) => {
     try {
-      const accessToken = JSON.parse(
-        localStorage.getItem("userInfo")
-      ).accessToken;
+      // const accessToken = JSON.parse(
+      //   localStorage.getItem("userInfo")
+      // ).accessToken;
       const response = await axios.get(
-        `http://localhost:3000/auth/users/getUser/${userId}`,
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
+        `http://localhost:3000/auth/users/getUser/${userId}`
+        // {
+        //   headers: {
+        //     authorization: `Bearer ${accessToken}`,
+        //   },
+        // }
       );
       return response.data.user;
     } catch (error) {
@@ -163,13 +165,32 @@ function Recipe() {
       {recipe !== null ? (
         <section className="recipe__info">
           <h1 id="name">{recipe.name}</h1>
+          <section className="contributor__details">
+            <div className="profile__details">
+              <p>Shared by : </p>
+              <img
+                id="contributor__avatar"
+                src={recipe.userDetails.avatar}
+                alt=""
+              />
+              <p id="contributor__name">{recipe.userDetails?.name}</p>
+            </div>
+            <p>|</p>
+            <p>Last updated : {recipe.updatedAt.substring(0, 10)}</p>
+            <p>|</p>
+            <p
+              onClick={() =>
+                targetEl.current.scrollIntoView({ behavior: "smooth" })
+              }
+              id="comments__count"
+            >
+              {recipe.comments.length +
+                " " +
+                `${recipe.comments.length === 1 ? "Comment" : "Comments"}`}
+            </p>
+          </section>
+
           <img src={recipe.image} alt={recipe.name} id="image" />
-          <p id="contributor__name">
-            Shared by :{" "}
-            <label id="shared__by">
-              {recipe.userDetails?.name}, {recipe.updatedAt.substring(0, 10)}{" "}
-            </label>{" "}
-          </p>
           <hr />
           <section className="about__recipe">
             <p>{recipe.description}</p>
@@ -204,71 +225,77 @@ function Recipe() {
             </p>
           </section>
           <hr />
-          <section className="bottom__section">
-            {recipe.userDetails?.email !==
-            JSON.parse(localStorage.getItem("userInfo")).email ? (
-              <div className="input__section">
-                <input
-                  type="text"
-                  placeholder="Write a comment"
-                  value={comment}
-                  required
-                  onChange={(e) => setComment(e.target.value)}
-                  id="comment__input"
-                />
-                <button onClick={() => addComment(recipe._id)}>
-                  <i className="fa-solid fa-paper-plane fa-beat-fade"></i>
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
-            <section className="comments">
-              {recipe.comments.length !== 0 &&
-                recipe.comments.map((comment, index) => (
-                  <div id="comment" key={index}>
-                    <div id="comment__details">
-                      <img id="comment__avatar" src={comment.avatar} alt="" />{" "}
-                      <div id="comment__info">
-                        <label>
-                          {comment.name}.{" "}
-                          <span>{comment.updatedAt.substring(0, 10)}</span>
-                        </label>{" "}
-                        <p>{comment.comment}</p>
-                      </div>
-                    </div>
-                    {comment.email ===
-                      JSON.parse(localStorage.getItem("userInfo")).email && (
-                      <button
-                        id="delete__comment"
-                        onClick={() => deleteComment(recipe._id, comment._id)}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    )}
-                  </div>
-                ))}
-            </section>
-          </section>
+          {localStorage.getItem("userInfo") !== null && (
+            <section className="bottom__section">
+              {recipe.userDetails?.email !==
+              JSON.parse(localStorage.getItem("userInfo")).email ? (
+                <div className="input__section">
+                  <input
+                    type="text"
+                    placeholder="Write a comment"
+                    value={comment}
+                    required
+                    onChange={(e) => setComment(e.target.value)}
+                    id="comment__input"
+                  />
+                  <button onClick={() => addComment(recipe._id)}>
+                    <i className="fa-solid fa-paper-plane fa-beat-fade"></i>
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
 
-          <div>
-            {recipe.userDetails?.email ===
-            JSON.parse(localStorage.getItem("userInfo")).email ? (
-              <div className="action__buttons">
-                <button id="edit__btn" onClick={() => editRecipe(recipe._id)}>
-                  Edit recipe <i className="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button
-                  id="delete__btn"
-                  onClick={() => deleteRecipe(recipe._id)}
-                >
-                  Delete recipe <i className="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+              <section ref={targetEl} className="comments">
+                {recipe.comments.length !== 0 &&
+                  recipe.comments.map((comment, index) => (
+                    <div id="comment" key={index}>
+                      <div id="comment__details">
+                        <img id="comment__avatar" src={comment.avatar} alt="" />{" "}
+                        <div id="comment__info">
+                          <label>
+                            {comment.name}.{" "}
+                            <span>{comment.updatedAt.substring(0, 10)}</span>
+                          </label>{" "}
+                          <p>{comment.comment}</p>
+                        </div>
+                      </div>
+                      {comment.email ===
+                        JSON.parse(localStorage.getItem("userInfo")).email && (
+                        <button
+                          id="delete__comment"
+                          onClick={() => deleteComment(recipe._id, comment._id)}
+                        >
+                          <i className="fa-solid fa-xmark"></i>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+              </section>
+            </section>
+          )}
+
+          {localStorage.getItem("userInfo") !== null && (
+            <div>
+              {recipe.userDetails?.email ===
+              JSON.parse(localStorage.getItem("userInfo")).email ? (
+                <div className="action__buttons">
+                  <button id="edit__btn" onClick={() => editRecipe(recipe._id)}>
+                    Edit recipe <i className="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    id="delete__btn"
+                    onClick={() => deleteRecipe(recipe._id)}
+                  >
+                    Delete recipe <i className="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          )}
+
           <Modal
             open={open}
             onClose={handleClose}

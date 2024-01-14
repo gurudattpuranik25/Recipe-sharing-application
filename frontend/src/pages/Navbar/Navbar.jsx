@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
+import maleAvatar from "../assets/maleAvatar.jpg";
 
 function Navbar() {
   const [userDetails, setUserDetails] = useState({});
@@ -27,7 +28,7 @@ function Navbar() {
       );
       setUserDetails(response.data.user);
     } catch (error) {
-      console.error("Error fetching user details:", error);
+      //   console.error("Error fetching user details:", error);
       return {};
     }
   };
@@ -57,23 +58,27 @@ function Navbar() {
     }
   };
 
+  const isUserActive = Object.keys(userDetails).length !== 0;
+
   return (
     <nav>
       <section className="navbar">
         <section className="nav__links">
           <img id="brand__logo" src={brand__logo} alt="brand logo" />
           <button onClick={() => navigate("/recipes")}>Explore Recipes</button>
-          <button onClick={() => navigate("/createRecipe")}>
+          <button
+            onClick={() => navigate(isUserActive ? "/createRecipe" : "/login")}
+          >
             Create Recipe
           </button>
         </section>
         {userDetails !== null && (
           <section className="user__links">
             <section onClick={handleClick} className="user__info">
-              <p id="username">{userDetails.name}</p>
+              <p id="username">{userDetails.name || "Guest"}</p>
               <img
                 id="avatar"
-                src={userDetails.avatar}
+                src={userDetails.avatar || maleAvatar}
                 alt="user profile pic"
               />
             </section>
@@ -83,15 +88,25 @@ function Navbar() {
               open={open}
               onClose={handleClose}
             >
-              <p className="menu__item">
-                {userDetails.email}
-                <i className="fa-solid fa-envelope"></i>
-              </p>
-              <hr />
-              <p onClick={handleLogout} className="menu__item">
-                Logout
-                <i className="fa-solid fa-right-from-bracket"></i>
-              </p>
+              {isUserActive ? (
+                <div>
+                  <p className="menu__item">
+                    {userDetails.email}
+                    <i className="fa-solid fa-envelope"></i>
+                  </p>
+                  <hr />
+                  <p onClick={handleLogout} className="menu__item">
+                    Logout
+                    <i className="fa-solid fa-right-from-bracket"></i>
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="menu__item" onClick={() => navigate("/login")}>
+                    Login <i className="fa-solid fa-right-from-bracket"></i>{" "}
+                  </p>
+                </div>
+              )}
             </Menu>
           </section>
         )}

@@ -79,7 +79,7 @@ function CreateRecipe() {
   };
 
   return (
-    <section id="cr">
+    <section id="create__recipe__wrapper">
       <Navbar />
       <div className="create__recipe">
         <h1 id="form__title">Create Recipe</h1>

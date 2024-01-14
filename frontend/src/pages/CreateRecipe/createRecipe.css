@@ -1,4 +1,6 @@
-#cr {
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600;700&family=Sanchez&display=swap");
+
+#create__recipe__wrapper {
   width: 100%;
   min-height: 100vh;
   background-color: #f9f3e3;
@@ -55,6 +57,8 @@ select {
 
 .create__recipe__form textarea {
   resize: none;
+  font-family: "Sanchez", serif;
+  height: 7.5rem;
 }
 
 input[type="file"] {

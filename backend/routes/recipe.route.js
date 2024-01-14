@@ -21,11 +21,11 @@ router.post(
   createRecipe
 );
 
-router.get("/recipes", authenticateAccessToken, getRecipes);
+router.get("/recipes", getRecipes);
 
 router.get(
   "/getSelectedRecipe/:recipeId",
-  authenticateAccessToken,
+  // authenticateAccessToken,
   getSelectedRecipe
 );
 

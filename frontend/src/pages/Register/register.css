@@ -109,3 +109,9 @@ form button:hover {
   border-radius: 5px;
   border: 2px solid #cfc8b5;
 }
+
+#authentication__error__message {
+  color: red;
+  margin-top: 1rem;
+  font-weight: bold;
+}

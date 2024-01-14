@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/register", upload.single("avatar"), register);
 router.post("/login", login);
 router.post("/logout", logout);
-router.get("/getUser/:userId", authenticateAccessToken, getUser);
+router.get("/getUser/:userId", getUser);
 router.get("/fetchUserDetails/:email", authenticateAccessToken, getUserByEmail);
 
 export default router;
