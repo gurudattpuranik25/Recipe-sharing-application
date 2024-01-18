@@ -254,7 +254,7 @@ function Recipe() {
             )}
 
             <section ref={targetEl} className="comments">
-              {recipe.comments.length !== 0 &&
+              {recipe.comments.length !== 0 ?
                 recipe.comments.map((comment, index) => (
                   <div id="comment" key={index}>
                     <div id="comment__details">
@@ -278,7 +278,7 @@ function Recipe() {
                         </button>
                       )}
                   </div>
-                ))}
+                )) : <p>No comments!</p> }
             </section>
           </section>
 
